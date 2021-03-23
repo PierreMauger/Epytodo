@@ -18,6 +18,7 @@
   "homepage": "https://github.com/EpitechIT2020/B-WEB-200-REN-2-1-epytodo-pierre.hamel#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mysql2": "^2.2.5"
   }
 }
