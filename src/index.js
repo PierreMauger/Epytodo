@@ -1,21 +1,13 @@
-require("dotenv").config();
+/*
 
 const express = require("express");
-const mysql2 = require("mysql2");
+const connection = require("./config/db");
 const app = express();
-const port = process.env.FRONT_PORT;
 
-const con = mysql2.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "db",
-});
+require("dotenv").config();
+const PORT = process.env.FRONT_PORT;
 
-con.connect(function (err) {
-  if (err) throw err;
-  console.log("Connected!");
-});
+db = connection.connectionDb();
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -27,6 +19,35 @@ app.get("/xD/", (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`App listening at http://localhost:${PORT}`);
+});
+
+*/
+
+import express from "express";
+import con from "./config/db.js";
+import dotenv from "dotenv";
+
+dotenv.config();
+const PORT = process.env.FRONT_PORT;
+
+let connectDB = con();
+
+const app = express();
+
+//console.log("hello");
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+app.get("/xD/", (req, res) => {
+  connectDB.query("SELECT id FROM user", function (err, rows, fields) {
+    res.send(fields);
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`App listening at http://localhost:${PORT}`);
 });
