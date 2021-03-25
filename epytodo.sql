@@ -1,4 +1,4 @@
-USE db;
+USE epytodo;
 
 CREATE TABLE user (
     id int,
