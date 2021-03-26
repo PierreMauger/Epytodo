@@ -1,17 +1,23 @@
 import express from "express";
 import dotenv from "dotenv";
-
-import con from "./config/db.js";
-import auth from "./route/auth/auth.js";
+import * as db from "./config/db.js";
+import authRouter from "./route/auth/auth.js";
+import { json } from "body-parser";
 
 dotenv.config();
 const PORT = process.env.FRONT_PORT;
 
-const dataBase = con();
-const app = express();
+async function main() {
+  const app = express();
 
-auth(app, dataBase);
+  await db.connect();
 
-app.listen(PORT, () => {
-  console.log(`App listening at http://localhost:${PORT}`);
-});
+  app.use(json());
+  app.use(authRouter);
+
+  app.listen(PORT, () => {
+    console.log(`App listening at http://localhost:${PORT}`);
+  });
+}
+
+main();

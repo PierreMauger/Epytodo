@@ -1,10 +1,17 @@
-const auth = function (app, dataBase) {
-  app.get("/register", (req, res) => {
-    // dataBase.query("SELECT id FROM user", function (err, rows, fields) {
-    //   res.send(fields);
-    // });
-    res.send("LOL");
-  });
-};
+import { Router } from "express";
+import { db } from "../../config/db.js";
 
-export default auth;
+const app = new Router();
+
+app.post("/register", (req, res) => {
+  db().query(
+    "INSERT INTO `user` (`email`, `password`, `name`, `firstname`) VALUES (?, ?, ?, ?)",
+    [req.body.email, req.body.password, req.body.name, req.body.firstname],
+    function (err, rows, fields) {
+      console.log(err);
+      res.send("OK");
+    }
+  );
+});
+
+export default app;
