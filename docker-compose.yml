@@ -1,0 +1,13 @@
+version: "3.1"
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mariadb_data:/var/lib/mysql
+      - ./epytodo.sql:/docker-entrypoint-initdb.d/init.sql:ro
