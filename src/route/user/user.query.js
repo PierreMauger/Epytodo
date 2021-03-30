@@ -31,8 +31,28 @@ app.get("/user/:id", (req, res) => {
     }
   );
 });
-app.put("/user/:id", (req, res) => {});
-
+app.put("/user/:id", (req, res) => {
+  db().query(
+    "INSERT INTO `todo` (`title`, `description`, `create_at`, `due_time`, `status`, `user_id`) VALUES (?, ?, ?, ?, ?, ?)",
+    [
+      req.body.title,
+      req.body.description,
+      req.body.create_at,
+      req.body.due_time,
+      req.body.status,
+      req.params.id,
+    ],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+        return res.status(500).send("There was a problem lol.");
+      } else {
+        console.log(rows);
+        res.status(200).send();
+      }
+    }
+  );
+});
 app.delete("/user/:id", (req, res) => {});
 
 export default app;

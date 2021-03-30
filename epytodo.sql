@@ -12,9 +12,9 @@ CREATE TABLE `epytodo`.`user` (
 CREATE TABLE `epytodo`.`todo` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(45) NOT NULL,
-  `descritpion` VARCHAR(255) NOT NULL,
+  `description` VARCHAR(255) NOT NULL,
   `create_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `dut_time` DATETIME,
+  `due_time` DATETIME,
   `status` VARCHAR(45) NOT NULL,
   `user_id` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
