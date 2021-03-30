@@ -31,6 +31,7 @@ app.get("/user/:id", (req, res) => {
     }
   );
 });
+
 app.put("/user/:id", (req, res) => {
   db().query(
     "INSERT INTO `todo` (`title`, `description`, `create_at`, `due_time`, `status`, `user_id`) VALUES (?, ?, ?, ?, ?, ?)",
@@ -53,6 +54,20 @@ app.put("/user/:id", (req, res) => {
     }
   );
 });
-app.delete("/user/:id", (req, res) => {});
 
+app.delete("/user/:id", (req, res) => {
+  db().query(
+    "DELETE FROM `user` WHERE `id` = (?)",
+    [req.params.id],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+        return res.status(500).send("There was a problem lol.");
+      } else {
+        console.log("User deleted");
+        res.status(200).send();
+      }
+    }
+  );
+});
 export default app;
