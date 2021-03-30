@@ -5,15 +5,34 @@ import { db } from "../../config/db.js";
 const app = new Router();
 
 app.get("/user/todos", (req, res) => {
+  db().query("SELECT * FROM `todo`", function (err, rows, fields) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send("There was a problem lol.");
+    } else {
+      console.log(rows);
+      res.status(200).send();
+    }
+  });
 });
 
 app.get("/user/:id", (req, res) => {
+  db().query(
+    "SELECT * FROM `user` WHERE `id` = (?)",
+    [req.params.id],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+        return res.status(500).send("There was a problem lol.");
+      } else {
+        console.log(rows);
+        res.status(200).send();
+      }
+    }
+  );
 });
+app.put("/user/:id", (req, res) => {});
 
-app.put("/user/:id", (req, res) => {
-});
-
-app.delete("/user/:id", (req, res) => {
-});
+app.delete("/user/:id", (req, res) => {});
 
 export default app;
