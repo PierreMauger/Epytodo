@@ -22,7 +22,7 @@ app.post("/login", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        return res.status(500).send("There was a problem lol.");
+        return res.status(500).send("There was a problem.");
       }
       if (rows.length) {
         var token = jwt.sign({ id: rows.id }, "secret", {

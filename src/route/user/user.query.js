@@ -1,19 +1,22 @@
 import { Router } from "express";
 import { db } from "../../config/db.js";
-//json web token
 
 const app = new Router();
 
 app.get("/user/todos", (req, res) => {
-  db().query("SELECT * FROM `todo`", function (err, rows, fields) {
-    if (err) {
-      console.log(err);
-      return res.status(500).send("There was a problem lol.");
-    } else {
-      console.log(rows);
-      res.status(200).send();
+  db().query(
+    "SELECT * FROM `todo`", // WHERE `user_id` = (?)
+    //[req.body.user_id],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+        return res.status(500).send("There was a problem.");
+      } else {
+        console.log(rows);
+        res.status(200).send();
+      }
     }
-  });
+  );
 });
 
 app.get("/user/:id", (req, res) => {
@@ -23,7 +26,7 @@ app.get("/user/:id", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        return res.status(500).send("There was a problem lol.");
+        return res.status(500).send("There was a problem.");
       } else {
         console.log(rows);
         res.status(200).send();
@@ -46,7 +49,7 @@ app.put("/user/:id", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        return res.status(500).send("There was a problem lol.");
+        return res.status(500).send("There was a problem.");
       } else {
         console.log(rows);
         res.status(200).send();
@@ -62,7 +65,7 @@ app.delete("/user/:id", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        return res.status(500).send("There was a problem lol.");
+        return res.status(500).send("There was a problem.");
       } else {
         console.log("User deleted");
         res.status(200).send();
@@ -70,4 +73,5 @@ app.delete("/user/:id", (req, res) => {
     }
   );
 });
+
 export default app;
