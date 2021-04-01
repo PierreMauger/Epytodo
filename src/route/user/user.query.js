@@ -10,10 +10,9 @@ app.get("/user/todos", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        return res.status(500).send("There was a problem.");
+        res.send("There was a problem.");
       } else {
-        console.log(rows);
-        res.status(200).send(rows);
+        res.send(rows);
       }
     }
   );
@@ -26,10 +25,9 @@ app.get("/user/:id", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        return res.status(500).send("There was a problem.");
+        res.send("There was a problem.");
       } else {
-        console.log(rows);
-        res.status(200).send(rows);
+        res.send(rows);
       }
     }
   );
@@ -49,10 +47,9 @@ app.put("/user/:id", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        return res.status(500).send("There was a problem.");
+        res.send("There was a problem.");
       } else {
-        console.log(rows);
-        res.status(200).send();
+        res.send();
       }
     }
   );
@@ -65,12 +62,11 @@ app.delete("/user/:id", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        return res.status(500).send("There was a problem.");
+        res.send("There was a problem.");
       } else {
-        console.log("User deleted");
-        res
-          .status(200)
-          .send({ msg: "Succesfully deleted record number: " + req.params.id });
+        res.send({
+          msg: "Succesfully deleted record number: " + req.params.id,
+        });
       }
     }
   );

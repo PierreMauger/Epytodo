@@ -10,10 +10,9 @@ app.get("/todo/:id", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        return res.status(500).send("There was a problem.");
+        res.send("There was a problem.");
       } else {
-        console.log(rows);
-        res.status(200).send();
+        res.send(rows);
       }
     }
   );
@@ -28,14 +27,14 @@ app.post("/todo", (req, res) => {
       req.body.create_at,
       req.body.due_time,
       req.body.status,
-      req.params.id,
+      req.body.user_id,
     ],
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        return res.status(500).send("There was a problem.");
+        res.send("There was a problem.");
       } else {
-        console.log(rows);
+        console.log(fields);
         res.status(200).send();
       }
     }
@@ -51,10 +50,11 @@ app.delete("/todo/:id", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        return res.status(500).send("There was a problem.");
+        res.send("There was a problem.");
       } else {
-        console.log("Todo deleted");
-        res.status(200).send();
+        res.send({
+          msg: "Succesfully deleted record number: " + req.params.id,
+        });
       }
     }
   );
