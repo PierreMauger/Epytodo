@@ -5,15 +5,15 @@ const app = new Router();
 
 app.get("/user/todos", (req, res) => {
   db().query(
-    "SELECT * FROM `todo`", // WHERE `user_id` = (?)
-    //[req.body.user_id],
+    "SELECT * FROM `todo` WHERE `user_id` = (?)",
+    [req.body.user_id],
     function (err, rows, fields) {
       if (err) {
         console.log(err);
         return res.status(500).send("There was a problem.");
       } else {
         console.log(rows);
-        res.status(200).send();
+        res.status(200).send(rows);
       }
     }
   );
@@ -29,7 +29,7 @@ app.get("/user/:id", (req, res) => {
         return res.status(500).send("There was a problem.");
       } else {
         console.log(rows);
-        res.status(200).send();
+        res.status(200).send(rows);
       }
     }
   );
@@ -68,7 +68,9 @@ app.delete("/user/:id", (req, res) => {
         return res.status(500).send("There was a problem.");
       } else {
         console.log("User deleted");
-        res.status(200).send();
+        res
+          .status(200)
+          .send({ msg: "Succesfully deleted record number: " + req.params.id });
       }
     }
   );

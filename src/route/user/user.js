@@ -10,7 +10,7 @@ app.get("/user", (req, res) => {
       return res.status(500).send("There was a problem.");
     } else {
       console.log(rows);
-      res.status(200).send();
+      res.status(200).send({ rows });
     }
   });
 });
