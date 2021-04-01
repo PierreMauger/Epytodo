@@ -35,13 +35,12 @@ app.get("/user/:id", (req, res) => {
 
 app.put("/user/:id", (req, res) => {
   db().query(
-    "INSERT INTO `todo` (`title`, `description`, `create_at`, `due_time`, `status`, `user_id`) VALUES (?, ?, ?, ?, ?, ?)",
+    "UPDATE `user` SET email = (?), password = (?), name = (?), firstname = (?) WHERE id = (?)",
     [
-      req.body.title,
-      req.body.description,
-      req.body.create_at,
-      req.body.due_time,
-      req.body.status,
+      req.body.email,
+      req.body.password,
+      req.body.name,
+      req.body.firstname,
       req.params.id,
     ],
     function (err, rows, fields) {
@@ -49,7 +48,18 @@ app.put("/user/:id", (req, res) => {
         console.log(err);
         res.status(400).send("There was a problem.");
       } else {
-        res.status(200).send();
+        db().query(
+          "SELECT * FROM `user` WHERE `id` = (?)",
+          [req.params.id],
+          function (err, rows, fields) {
+            if (err) {
+              console.log(err);
+              res.status(400).send("There was a problem.");
+            } else {
+              res.status(200).send(rows);
+            }
+          }
+        );
       }
     }
   );

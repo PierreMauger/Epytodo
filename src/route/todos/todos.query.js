@@ -50,8 +50,39 @@ app.post("/todo", (req, res) => {
   );
 });
 
-app.put("/todo/:id", (req, res) => {});
-
+app.put("/todo/:id", (req, res) => {
+  db().query(
+    "UPDATE `todo` SET title = (?), description = (?), create_at = (?), due_time = (?), status = (?), user_id = (?) WHERE id = (?)",
+    [
+      req.body.title,
+      req.body.description,
+      req.body.create_at,
+      req.body.due_time,
+      req.body.status,
+      req.body.user_id,
+      req.params.id,
+    ],
+    function (err, rows, fields) {
+      if (err) {
+        console.log(err);
+        res.status(400).send("There was a problem.");
+      } else {
+        db().query(
+          "SELECT * FROM `todo` WHERE `id` = (?)",
+          [req.params.id],
+          function (err, rows, fields) {
+            if (err) {
+              console.log(err);
+              res.status(400).send("There was a problem.");
+            } else {
+              res.status(200).send(rows);
+            }
+          }
+        );
+      }
+    }
+  );
+});
 app.delete("/todo/:id", (req, res) => {
   db().query(
     "DELETE FROM `todo` WHERE `id` = (?)",
