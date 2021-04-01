@@ -11,13 +11,13 @@ app.post("/register", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err.sqlMessage);
-        res.send({ msg: "user already exist" });
+        res.status(400).send({ msg: "user already exist" });
       } else {
         var token = jwt.sign({ id: rows.id }, "secret", {
           expiresIn: 86400, // expires in 24 hours
         });
         console.log("User created");
-        res.send({ token: token });
+        res.status(200).send({ token: token });
       }
     }
   );
@@ -30,17 +30,17 @@ app.post("/login", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        return res.send("There was a problem.");
+        return res.status(400).send("There was a problem.");
       }
       if (rows.length) {
         var token = jwt.sign({ id: rows.id }, "secret", {
           expiresIn: 86400, // expires in 24 hours
         });
         console.log("Token created");
-        res.send({ token: token });
+        res.status(200).send({ token: token });
       } else {
         console.log("Failed to create token.");
-        res.send({ msg: "Invalid Credentials" });
+        res.status(400).send({ msg: "Invalid Credentials" });
       }
     }
   );

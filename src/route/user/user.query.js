@@ -10,9 +10,9 @@ app.get("/user/todos", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        res.send("There was a problem.");
+        res.status(400).send("There was a problem.");
       } else {
-        res.send(rows);
+        res.status(200).send(rows);
       }
     }
   );
@@ -25,9 +25,9 @@ app.get("/user/:id", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        res.send("There was a problem.");
+        res.status(400).send("There was a problem.");
       } else {
-        res.send(rows);
+        res.status(200).send(rows);
       }
     }
   );
@@ -47,9 +47,9 @@ app.put("/user/:id", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        res.send("There was a problem.");
+        res.status(400).send("There was a problem.");
       } else {
-        res.send();
+        res.status(200).send();
       }
     }
   );
@@ -62,9 +62,9 @@ app.delete("/user/:id", (req, res) => {
     function (err, rows, fields) {
       if (err) {
         console.log(err);
-        res.send("There was a problem.");
+        res.status(400).send("There was a problem.");
       } else {
-        res.send({
+        res.status(200).send({
           msg: "Succesfully deleted record number: " + req.params.id,
         });
       }

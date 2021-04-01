@@ -7,9 +7,9 @@ app.get("/todo", (req, res) => {
   db().query("SELECT * FROM `todo`", function (err, rows, fields) {
     if (err) {
       console.log(err);
-      res.send("There was a problem.");
+      res.status(400).send("There was a problem.");
     } else {
-      res.send(rows);
+      res.status(200).send(rows);
     }
   });
 });
