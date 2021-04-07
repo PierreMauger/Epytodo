@@ -5,6 +5,8 @@ import bcrypt from "bcrypt"
 
 const app = new Router();
 
+const SECRET = process.env.SECRET;
+
 app.post("/register", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -24,9 +26,10 @@ app.post("/register", (req, res) => {
         console.log(err.sqlMessage);
         res.status(400).send({ msg: "user already exist" });
       } else {
-        var token = jwt.sign({ id: rows.id }, "secret", {
+        var token = jwt.sign({ id: rows.id }, SECRET, {
           expiresIn: 86400, // expires in 24 hours
         });
+        req.header.token = token;
         console.log("User created");
         res.status(200).send({ token: token });
       }
@@ -51,9 +54,10 @@ app.post("/login", (req, res) => {
         return res.status(400).send("There was a problem.");
       }
       if (rows.length && bcrypt.compareSync(password, rows[0].password)) {
-        var token = jwt.sign({ id: rows[0].id }, "secret", {
+        var token = jwt.sign({ id: rows[0].id }, SECRET, {
           expiresIn: 86400, // expires in 24 hours
         });
+        req.header.token = token;
         console.log("Token created");
         res.status(200).send({ token: token });
       } else {

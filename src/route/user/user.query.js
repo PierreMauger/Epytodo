@@ -1,18 +1,13 @@
 import { Router } from "express";
 import { db } from "../../config/db.js";
+import jwt from "jsonwebtoken";
 
 const app = new Router();
 
 app.get("/user/todos", (req, res) => {
-  const user_id = req.body.user_id;
-
-  if (!user_id) {
-    res.status(400).send({ msg: "bad ID" });
-    return;
-  }
   db().query(
     "SELECT * FROM `todo` WHERE `user_id` = (?)",
-    [user_id],
+    [jwt.decode(req.user).id],
     function (err, rows, fields) {
       if (err) {
         console.log(err);

@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import * as db from "./config/db.js";
+import middleware from "./middleware/auth.js";
 import authRouter from "./route/auth/auth.js";
 import todosRouter from "./route/todos/todos.js";
 import todosqueryRouter from "./route/todos/todos.query.js";
@@ -20,6 +21,8 @@ async function main() {
 
   app.use(json());
   app.use(authRouter);
+
+  app.use(middleware);
   app.use(todosRouter);
   app.use(todosqueryRouter);
   app.use(userRouter);
