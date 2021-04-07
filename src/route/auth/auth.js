@@ -1,13 +1,24 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { db } from "../../config/db.js";
+import bcrypt from "bcrypt"
 
 const app = new Router();
 
 app.post("/register", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const name = req.body.name;
+  const firstname = req.body.firstname;
+
+  if (!email || !password || !name || !firstname) {
+    res.status(400).send({ msg: "bad JSON" });
+    return;
+  }
+  const hash = bcrypt.hashSync(req.body.password, 10);
   db().query(
     "INSERT INTO `user` (`email`, `password`, `name`, `firstname`) VALUES (?, ?, ?, ?)",
-    [req.body.email, req.body.password, req.body.name, req.body.firstname],
+    [email, hash, name, firstname],
     function (err, rows, fields) {
       if (err) {
         console.log(err.sqlMessage);
@@ -24,15 +35,22 @@ app.post("/register", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  if (!email || !password) {
+    res.status(400).send({ msg: "bad JSON" });
+    return;
+  }
   db().query(
-    "SELECT * FROM `user` WHERE (`email`, `password`) = (?, ?)",
-    [req.body.email, req.body.password],
+    "SELECT * FROM `user` WHERE (`email`) = (?)",
+    [email],
     function (err, rows, fields) {
       if (err) {
         console.log(err);
         return res.status(400).send("There was a problem.");
       }
-      if (rows.length) {
+      if (rows.length && bcrypt.compareSync(password, rows[0].password)) {
         var token = jwt.sign({ id: rows[0].id }, "secret", {
           expiresIn: 86400, // expires in 24 hours
         });
