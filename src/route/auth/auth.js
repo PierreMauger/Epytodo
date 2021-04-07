@@ -4,6 +4,8 @@ import { db } from "../../config/db.js";
 
 const app = new Router();
 
+const SECRET = process.env.SECRET;
+
 app.post("/register", (req, res) => {
   db().query(
     "INSERT INTO `user` (`email`, `password`, `name`, `firstname`) VALUES (?, ?, ?, ?)",
@@ -13,9 +15,10 @@ app.post("/register", (req, res) => {
         console.log(err.sqlMessage);
         res.status(400).send({ msg: "user already exist" });
       } else {
-        var token = jwt.sign({ id: rows.id }, "secret", {
+        var token = jwt.sign({ id: rows.id }, SECRET, {
           expiresIn: 86400, // expires in 24 hours
         });
+        req.header.token = token;
         console.log("User created");
         res.status(200).send({ token: token });
       }
@@ -33,9 +36,10 @@ app.post("/login", (req, res) => {
         return res.status(400).send("There was a problem.");
       }
       if (rows.length) {
-        var token = jwt.sign({ id: rows[0].id }, "secret", {
+        var token = jwt.sign({ id: rows[0].id }, SECRET, {
           expiresIn: 86400, // expires in 24 hours
         });
+        req.header.token = token;
         console.log("Token created");
         res.status(200).send({ token: token });
       } else {
