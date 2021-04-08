@@ -17,7 +17,7 @@ app.post("/register", (req, res) => {
     res.status(400).send({ msg: "bad JSON" });
     return;
   }
-  const hash = bcrypt.hashSync(req.body.password, 10);
+  const hash = bcrypt.hashSync(password, 10);
   db().query(
     "INSERT INTO `user` (`email`, `password`, `name`, `firstname`) VALUES (?, ?, ?, ?)",
     [email, hash, name, firstname],

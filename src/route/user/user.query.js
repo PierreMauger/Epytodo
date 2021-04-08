@@ -35,14 +35,25 @@ app.get("/user/:id", (req, res) => {
 });
 
 app.put("/user/:id", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const name = req.body.name;
+  const firstname = req.body.firstname;
+  const id = req.params.id;
+
+  if (!email || !password || !name || !firstname || !id) {
+    res.status(400).send({ msg: "bad JSON" });
+    return;
+  }
+  const hash = bcrypt.hashSync(password, 10);
   db().query(
     "UPDATE `user` SET email = (?), password = (?), name = (?), firstname = (?) WHERE id = (?)",
     [
-      req.body.email,
-      req.body.password,
-      req.body.name,
-      req.body.firstname,
-      req.params.id,
+      email,
+      hash,
+      name,
+      firstname,
+      id,
     ],
     function (err, rows, fields) {
       if (err) {
@@ -67,9 +78,15 @@ app.put("/user/:id", (req, res) => {
 });
 
 app.delete("/user/:id", (req, res) => {
+  const id = req.params.id;
+
+  if (!id) {
+    res.status(400).send({ msg: "bad ID" });
+    return;
+  }
   db().query(
     "DELETE FROM `user` WHERE `id` = (?)",
-    [req.params.id],
+    [id],
     function (err, rows, fields) {
       if (err) {
         console.log(err);

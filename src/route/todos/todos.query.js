@@ -4,9 +4,15 @@ import { db } from "../../config/db.js";
 const app = new Router();
 
 app.get("/todo/:id", (req, res) => {
+  const id = req.params.id;
+
+  if (!id) {
+    res.status(400).send({ msg: "bad ID" });
+    return;
+  }
   db().query(
     "SELECT * FROM `todo` WHERE `id` = (?)",
-    [req.params.id],
+    [],
     function (err, rows, fields) {
       if (err) {
         console.log(err);
@@ -19,15 +25,26 @@ app.get("/todo/:id", (req, res) => {
 });
 
 app.post("/todo", (req, res) => {
+  const title = req.body.title;
+  const description = req.body.description;
+  const create_at = req.body.create_at;
+  const due_time = req.body.due_time;
+  const status = req.body.status;
+  const user_id = req.user.id;
+
+  if (!title || !description || !create_at || !due_time || !status || !user_id) {
+    res.status(400).send({ msg: "bad JSON" });
+    return;
+  }
   db().query(
     "INSERT INTO `todo` (`title`, `description`, `create_at`, `due_time`, `status`, `user_id`) VALUES (?, ?, ?, ?, ?, ?)",
     [
-      req.body.title,
-      req.body.description,
-      req.body.create_at,
-      req.body.due_time,
-      req.body.status,
-      req.user.id,
+      title,
+      description,
+      create_at,
+      due_time,
+      status,
+      user_id,
     ],
     function (err, rows, fields) {
       if (err) {
@@ -51,16 +68,28 @@ app.post("/todo", (req, res) => {
 });
 
 app.put("/todo/:id", (req, res) => {
+  const title = req.body.title;
+  const description = req.body.description;
+  const create_at = req.body.create_at;
+  const due_time = req.body.due_time;
+  const status = req.body.status;
+  const user_id = req.body.user_id;
+  const id = req.body.params.id;
+
+  if (!title || !description || !create_at || !due_time || !status || !user_id || !id) {
+    res.status(400).send({ msg: "bad JSON" });
+    return;
+  }
   db().query(
     "UPDATE `todo` SET title = (?), description = (?), create_at = (?), due_time = (?), status = (?), user_id = (?) WHERE id = (?)",
     [
-      req.body.title,
-      req.body.description,
-      req.body.create_at,
-      req.body.due_time,
-      req.body.status,
-      req.body.user_id,
-      req.params.id,
+      title,
+      description,
+      create_at,
+      due_time,
+      status,
+      user_id,
+      id,
     ],
     function (err, rows, fields) {
       if (err) {
@@ -84,6 +113,12 @@ app.put("/todo/:id", (req, res) => {
   );
 });
 app.delete("/todo/:id", (req, res) => {
+  const id = req.params.id;
+
+  if (!id) {
+    res.status(400).send({ msg: "bad ID" });
+    return;
+  }
   db().query(
     "DELETE FROM `todo` WHERE `id` = (?)",
     [req.params.id],
