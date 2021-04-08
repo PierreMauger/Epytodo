@@ -7,11 +7,13 @@ const SECRET = process.env.SECRET;
 var middleware = function(req, res, next) {
     jwt.verify(req.header.token, SECRET, (err, user) => {
     if (err) {
-        return res.sendStatus(403);
+        console.log(err);
+        return res.status(400).send({ msg: "No token, authorization denied" });
     }
     req.user = user;
     next();
     }
   );
 }
+
 export default middleware;

@@ -27,7 +27,7 @@ app.post("/todo", (req, res) => {
       req.body.create_at,
       req.body.due_time,
       req.body.status,
-      req.body.user_id,
+      req.user.id,
     ],
     function (err, rows, fields) {
       if (err) {
