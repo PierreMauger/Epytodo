@@ -26,12 +26,23 @@ app.post("/register", (req, res) => {
         console.log(err.sqlMessage);
         res.status(400).send({ msg: "user already exist" });
       } else {
-        var token = jwt.sign({ id: rows.id }, SECRET, {
-          expiresIn: 86400, // expires in 24 hours
-        });
-        req.header.token = token;
-        console.log("User created");
-        res.status(200).send({ token: token });
+        db().query(
+          "SELECT * FROM `user` WHERE (`email`) = (?)",
+          [email],
+          function (err, rows, fields) {
+            if (err) {
+              console.log(err);
+              return res.status(400).send("There was a problem.");
+            } else {
+              var token = jwt.sign({ id: rows[0].id }, SECRET, {
+                expiresIn: 86400, // expires in 24 hours
+              });
+              req.header.token = token;
+              console.log("User created");
+              res.status(200).send({ token: token });
+            }
+          }
+        );
       }
     }
   );

@@ -12,7 +12,7 @@ app.get("/todo/:id", (req, res) => {
   }
   db().query(
     "SELECT * FROM `todo` WHERE `id` = (?)",
-    [],
+    [id],
     function (err, rows, fields) {
       if (err) {
         console.log(err);
@@ -74,7 +74,7 @@ app.put("/todo/:id", (req, res) => {
   const due_time = req.body.due_time;
   const status = req.body.status;
   const user_id = req.body.user_id;
-  const id = req.body.params.id;
+  const id = req.params.id;
 
   if (!title || !description || !create_at || !due_time || !status || !user_id || !id) {
     res.status(400).send({ msg: "bad JSON" });
@@ -98,7 +98,7 @@ app.put("/todo/:id", (req, res) => {
       } else {
         db().query(
           "SELECT * FROM `todo` WHERE `id` = (?)",
-          [req.params.id],
+          [id],
           function (err, rows, fields) {
             if (err) {
               console.log(err);

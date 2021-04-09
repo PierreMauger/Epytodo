@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { db } from "../../config/db.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt"
 
 const app = new Router();
 
@@ -62,7 +63,7 @@ app.put("/user/:id", (req, res) => {
       } else {
         db().query(
           "SELECT * FROM `user` WHERE `id` = (?)",
-          [req.params.id],
+          [id],
           function (err, rows, fields) {
             if (err) {
               console.log(err);
@@ -92,6 +93,16 @@ app.delete("/user/:id", (req, res) => {
         console.log(err);
         res.status(400).send("There was a problem.");
       } else {
+        db().query(
+            "DELETE FROM `todo` WHERE `user_id` = (?)",
+            [id],
+            function (err, rows, fields) {
+              if (err) {
+                console.log(err);
+                res.status(400).send("There was a problem.");
+              }
+            }
+          );
         res.status(200).send({
           msg: "Succesfully deleted record number: " + req.params.id,
         });
